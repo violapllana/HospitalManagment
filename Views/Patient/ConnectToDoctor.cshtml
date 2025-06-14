@@ -1,0 +1,56 @@
+@model List<HospitalManagement.ViewModels.DoctorViewModel>
+
+<h2>Manage Connections</h2>
+
+<!-- Search Form -->
+<form method="get" class="mb-4">
+    <div class="mb-3">
+        <label for="searchText" class="form-label">Search Doctor's Name</label>
+        <input 
+            type="text" 
+            id="searchText" 
+            name="searchText" 
+            class="form-control" 
+            value="@ViewContext.HttpContext.Request.Query["searchText"]" 
+            placeholder="Enter doctor's name" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<hr />
+
+@if (Model != null && Model.Any())
+{
+    <div class="doctor-list">
+        @foreach (var doctorViewModel in Model)
+        {
+            <div class="doctor-card border p-3 mb-3">
+                <h4>@doctorViewModel.Doctor.FullName</h4>
+                <p>Specialty: @doctorViewModel.Doctor.Specialty</p>
+
+                <!-- Show Connect or Disconnect Button Based on Connection Status -->
+                @if (doctorViewModel.IsConnected)
+                {
+                    <p class="text-success">You are connected to this doctor.</p>
+                    <form asp-action="DisconnectFeedbackForm" method="get">
+                        <input type="hidden" name="doctorId" value="@doctorViewModel.Doctor.Id" />
+                        <button type="submit" class="btn btn-danger">Disconnect</button>
+                    </form>
+                }
+                else
+                {
+                    <p class="text-warning">You are not connected to this doctor.</p>
+                    <form asp-action="ConnectToDoctorPost" method="post">
+                        <input type="hidden" name="doctorId" value="@doctorViewModel.Doctor.Id" />
+                        <button type="submit" class="btn btn-primary">Connect</button>
+                    </form>
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="text-muted">No doctors found. Try adjusting your search criteria.</p>
+}

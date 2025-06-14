@@ -1,0 +1,28 @@
+@model HospitalManagement.ViewModels.EditAccountViewModel
+
+<h2 class="page-title">My Account</h2>
+
+@using (Html.BeginForm("MyAccount", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="FullName">Full Name:</label>
+        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Surname">Surname:</label>
+        @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Email">Email:</label>
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+    </div>
+    
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
